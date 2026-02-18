@@ -157,6 +157,8 @@ export default async function handler(req, res) {
         details: addFailure?.message || "Unknown track insert error",
         spotifyStatus: addFailure?.status || null,
         spotifyError: addFailure?.details || null,
+        spotifyAuth: addFailure?.spotifyAuth || null,
+        spotifyRequestId: addFailure?.spotifyRequestId || null,
         failedAt: "POST /playlists/{playlist_id}/tracks",
         playlist: {
           id: playlist.id,

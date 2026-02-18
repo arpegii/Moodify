@@ -189,6 +189,8 @@ async function spotifyRequest(method, path, accessToken, { query, body } = {}) {
     const error = new Error(payload?.error?.message || payload?.error || "Spotify API request failed");
     error.status = response.status;
     error.details = payload;
+    error.spotifyAuth = response.headers.get("www-authenticate");
+    error.spotifyRequestId = response.headers.get("spotify-trace-id");
     throw error;
   }
 
