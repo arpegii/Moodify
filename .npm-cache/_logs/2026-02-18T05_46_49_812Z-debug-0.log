@@ -1,0 +1,28 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.8.0
+2 info using node@v24.13.1
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\Coby\Desktop\spotify\backend\.npmrc
+5 silly config load:file:C:\Users\Coby\.npmrc
+6 silly config load:file:C:\Users\Coby\Desktop\spotify\backend\etc\npmrc
+7 verbose title npm install
+8 verbose argv "--prefix" "backend" "install"
+9 verbose logfile logs-max:10 dir:C:\Users\Coby\Desktop\spotify\.npm-cache\_logs\2026-02-18T05_46_49_812Z-
+10 verbose logfile C:\Users\Coby\Desktop\spotify\.npm-cache\_logs\2026-02-18T05_46_49_812Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+13 silly idealTree buildDeps
+14 silly fetch manifest axios@^1.7.9
+15 silly packumentCache full:https://registry.npmjs.org/axios cache-miss
+16 http fetch GET https://registry.npmjs.org/axios attempt 1 failed with EACCES
+17 http fetch GET https://registry.npmjs.org/axios attempt 2 failed with EACCES
+18 http fetch GET https://registry.npmjs.org/axios attempt 3 failed with EACCES
+19 silly fetch manifest cookie-parser@^1.4.7
+20 silly packumentCache full:https://registry.npmjs.org/cookie-parser cache-miss
+21 http fetch GET https://registry.npmjs.org/cookie-parser attempt 1 failed with EACCES
+22 http fetch GET https://registry.npmjs.org/cookie-parser attempt 2 failed with EACCES
+23 http fetch GET https://registry.npmjs.org/cookie-parser attempt 3 failed with EACCES
+24 silly fetch manifest cors@^2.8.5
+25 silly packumentCache full:https://registry.npmjs.org/cors cache-miss
+26 http fetch GET https://registry.npmjs.org/cors attempt 1 failed with EACCES
+27 http fetch GET https://registry.npmjs.org/cors attempt 2 failed with EACCES

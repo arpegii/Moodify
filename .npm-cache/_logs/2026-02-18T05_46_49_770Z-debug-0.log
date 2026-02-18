@@ -1,0 +1,59 @@
+0 verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+1 info using npm@11.8.0
+2 info using node@v24.13.1
+3 silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+4 silly config load:file:C:\Users\Coby\Desktop\spotify\.npmrc
+5 silly config load:file:C:\Users\Coby\.npmrc
+6 silly config load:file:C:\Users\Coby\AppData\Roaming\npm\etc\npmrc
+7 verbose title npm install
+8 verbose argv "install"
+9 verbose logfile logs-max:10 dir:C:\Users\Coby\Desktop\spotify\.npm-cache\_logs\2026-02-18T05_46_49_770Z-
+10 verbose logfile C:\Users\Coby\Desktop\spotify\.npm-cache\_logs\2026-02-18T05_46_49_770Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+13 silly idealTree buildDeps
+14 silly fetch manifest concurrently@^9.1.2
+15 silly packumentCache full:https://registry.npmjs.org/concurrently cache-miss
+16 http fetch GET https://registry.npmjs.org/concurrently attempt 1 failed with EACCES
+17 http fetch GET https://registry.npmjs.org/concurrently attempt 2 failed with EACCES
+18 http fetch GET https://registry.npmjs.org/concurrently attempt 3 failed with EACCES
+19 silly placeDep ROOT concurrently@ OK for: moodify-spotify-project@1.0.0 want: ^9.1.2
+20 verbose type system
+21 verbose stack FetchError: request to https://registry.npmjs.org/concurrently failed, reason: 
+21 verbose stack     at ClientRequest.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\index.js:130:14)
+21 verbose stack     at ClientRequest.emit (node:events:508:28)
+21 verbose stack     at emitErrorEvent (node:_http_client:108:11)
+21 verbose stack     at _destroy (node:_http_client:963:9)
+21 verbose stack     at onSocketNT (node:_http_client:983:5)
+21 verbose stack     at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+22 error code EACCES
+23 error errno EACCES
+24 error FetchError: request to https://registry.npmjs.org/concurrently failed, reason: 
+24 error     at ClientRequest.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\minipass-fetch\lib\index.js:130:14)
+24 error     at ClientRequest.emit (node:events:508:28)
+24 error     at emitErrorEvent (node:_http_client:108:11)
+24 error     at _destroy (node:_http_client:963:9)
+24 error     at onSocketNT (node:_http_client:983:5)
+24 error     at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+24 error   code: 'EACCES',
+24 error   errno: 'EACCES',
+24 error   type: 'system',
+24 error   requiredBy: '.'
+24 error }
+25 error
+25 error The operation was rejected by your operating system.
+25 error It's possible that the file was already in use (by a text editor or antivirus),
+25 error or that you lack permissions to access it.
+25 error
+25 error If you believe this might be a permissions issue, please double-check the
+25 error permissions of the file and its containing directories, or try running
+25 error the command again as root/Administrator.
+26 silly unfinished npm timer reify 1771393610323
+27 silly unfinished npm timer reify:loadTrees 1771393610325
+28 verbose cwd C:\Users\Coby\Desktop\spotify
+29 verbose os Windows_NT 10.0.19045
+30 verbose node v24.13.1
+31 verbose npm  v11.8.0
+32 verbose exit 1
+33 verbose code 1
+34 error A complete log of this run can be found in: C:\Users\Coby\Desktop\spotify\.npm-cache\_logs\2026-02-18T05_46_49_770Z-debug-0.log
