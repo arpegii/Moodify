@@ -21,6 +21,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [warning, setWarning] = useState("");
   const [playlist, setPlaylist] = useState(null);
 
   const authMessage = useMemo(() => {
@@ -52,6 +53,7 @@ function App() {
   async function createPlaylist() {
     setSubmitting(true);
     setError("");
+    setWarning("");
     setPlaylist(null);
 
     try {
@@ -64,10 +66,16 @@ function App() {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || "Failed to create playlist");
+        throw new Error(data.details || data.error || "Failed to create playlist");
       }
 
-      setPlaylist(data.playlist);
+      if (data.playlist) {
+        setPlaylist(data.playlist);
+      }
+
+      if (data.partial) {
+        setWarning(data.details || "Playlist created, but no tracks were added.");
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -162,6 +170,11 @@ function App() {
         {error ? (
           <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
             {error}
+          </p>
+        ) : null}
+        {warning ? (
+          <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-700">
+            {warning}
           </p>
         ) : null}
         {playlist ? (

@@ -112,9 +112,28 @@ export default async function handler(req, res) {
       },
     });
 
-    await spotifyRequest("POST", `/playlists/${playlist.id}/tracks`, accessToken, {
-      body: { uris },
-    });
+    try {
+      await spotifyRequest("POST", `/playlists/${playlist.id}/tracks`, accessToken, {
+        body: { uris },
+      });
+    } catch (addErr) {
+      return json(res, 200, {
+        ok: false,
+        partial: true,
+        error: "Playlist created but failed to add tracks",
+        details:
+          addErr?.details?.error?.message ||
+          addErr?.details?.error ||
+          addErr?.message ||
+          "Unknown track insert error",
+        playlist: {
+          id: playlist.id,
+          name: playlist.name,
+          url: playlist.external_urls?.spotify,
+        },
+        tracksAdded: 0,
+      });
+    }
 
     return json(res, 200, {
       ok: true,
