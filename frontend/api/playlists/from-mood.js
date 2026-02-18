@@ -71,9 +71,13 @@ export default async function handler(req, res) {
       tracksAdded: uris.length,
     });
   } catch (error) {
-    return json(res, 500, {
+    const statusCode = Number(error?.status) || 500;
+    const details =
+      error?.details?.error?.message || error?.details?.error || error?.details || error?.message;
+
+    return json(res, statusCode, {
       error: "Failed to create playlist",
-      details: error.details || error.message,
+      details,
     });
   }
 }

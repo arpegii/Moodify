@@ -1,30 +1,30 @@
 const moodTargets = {
   happy: {
-    seed_genres: "pop,dance,party",
+    seed_genres: "pop,dance,disco",
     target_valence: 0.88,
     target_energy: 0.78,
     target_danceability: 0.8,
   },
   chill: {
-    seed_genres: "chill,ambient,lo-fi",
+    seed_genres: "chill,ambient,acoustic",
     target_valence: 0.55,
     target_energy: 0.35,
     target_danceability: 0.45,
   },
   energetic: {
-    seed_genres: "edm,work-out,rock",
+    seed_genres: "edm,rock,electro",
     target_valence: 0.72,
     target_energy: 0.94,
     target_danceability: 0.7,
   },
   focused: {
-    seed_genres: "classical,study,piano",
+    seed_genres: "classical,ambient,piano",
     target_valence: 0.48,
     target_energy: 0.4,
     target_instrumentalness: 0.82,
   },
   melancholic: {
-    seed_genres: "acoustic,sad,indie",
+    seed_genres: "acoustic,indie,folk",
     target_valence: 0.22,
     target_energy: 0.32,
     target_danceability: 0.3,
@@ -178,7 +178,12 @@ async function spotifyRequest(method, path, accessToken, { query, body } = {}) {
   });
 
   const text = await response.text();
-  const payload = text ? JSON.parse(text) : null;
+  let payload = null;
+  try {
+    payload = text ? JSON.parse(text) : null;
+  } catch {
+    payload = text || null;
+  }
 
   if (!response.ok) {
     const error = new Error(payload?.error?.message || payload?.error || "Spotify API request failed");
