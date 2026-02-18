@@ -127,18 +127,36 @@ export default async function handler(req, res) {
       },
     });
 
+    let tracksAdded = 0;
+    let addFailure = null;
     try {
       await spotifyRequest("POST", `/playlists/${playlist.id}/tracks`, accessToken, {
         body: { uris },
       });
+      tracksAdded = uris.length;
     } catch (addErr) {
+      addFailure = addErr;
+      // Fallback: attempt per-track insert so one invalid/restricted track won't fail the whole request.
+      for (const uri of uris) {
+        try {
+          await spotifyRequest("POST", `/playlists/${playlist.id}/tracks`, accessToken, {
+            body: { uris: [uri] },
+          });
+          tracksAdded += 1;
+        } catch {
+          // Skip failing tracks.
+        }
+      }
+    }
+
+    if (!tracksAdded) {
       return json(res, 200, {
         ok: false,
         partial: true,
         error: "Playlist created but failed to add tracks",
-        details: addErr?.message || "Unknown track insert error",
-        spotifyStatus: addErr?.status || null,
-        spotifyError: addErr?.details || null,
+        details: addFailure?.message || "Unknown track insert error",
+        spotifyStatus: addFailure?.status || null,
+        spotifyError: addFailure?.details || null,
         failedAt: "POST /playlists/{playlist_id}/tracks",
         playlist: {
           id: playlist.id,
@@ -151,12 +169,13 @@ export default async function handler(req, res) {
 
     return json(res, 200, {
       ok: true,
+      partial: tracksAdded < uris.length,
       playlist: {
         id: playlist.id,
         name: playlist.name,
         url: playlist.external_urls?.spotify,
       },
-      tracksAdded: uris.length,
+      tracksAdded,
     });
   } catch (error) {
     const statusCode = Number(error?.status) || 500;
