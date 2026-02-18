@@ -30,6 +30,24 @@ export default async function handler(req, res) {
   }
 
   try {
+    const pickUris = (tracks, currentMarket) =>
+      Array.from(
+        new Set(
+          (tracks || [])
+            .filter((track) => track && typeof track.uri === "string")
+            .filter((track) => track.uri.startsWith("spotify:track:"))
+            .filter((track) => !track.is_local)
+            .filter((track) => track.is_playable !== false)
+            .filter((track) => {
+              if (!Array.isArray(track.available_markets) || !track.available_markets.length) {
+                return true;
+              }
+              return track.available_markets.includes(currentMarket);
+            })
+            .map((track) => track.uri)
+        )
+      ).slice(0, 20);
+
     const me = await spotifyRequest("GET", "/me", accessToken);
     const market = me.country || "US";
     const seedGenres = String(settings.seed_genres || "")
@@ -47,7 +65,7 @@ export default async function handler(req, res) {
           market,
         },
       });
-      uris = (recs.tracks || []).map((track) => track.uri).filter(Boolean);
+      uris = pickUris(recs.tracks, market);
     } catch {
       uris = [];
     }
@@ -61,7 +79,7 @@ export default async function handler(req, res) {
             market,
           },
         });
-        uris = (recs.tracks || []).map((track) => track.uri).filter(Boolean);
+        uris = pickUris(recs.tracks, market);
       } catch {
         uris = [];
       }
@@ -85,10 +103,7 @@ export default async function handler(req, res) {
         }
       }
 
-      uris = Array.from(new Set(searchResults.map((track) => track.uri).filter(Boolean))).slice(
-        0,
-        20
-      );
+      uris = pickUris(searchResults, market);
     }
 
     if (!uris.length) {
@@ -121,11 +136,10 @@ export default async function handler(req, res) {
         ok: false,
         partial: true,
         error: "Playlist created but failed to add tracks",
-        details:
-          addErr?.details?.error?.message ||
-          addErr?.details?.error ||
-          addErr?.message ||
-          "Unknown track insert error",
+        details: addErr?.message || "Unknown track insert error",
+        spotifyStatus: addErr?.status || null,
+        spotifyError: addErr?.details || null,
+        failedAt: "POST /playlists/{playlist_id}/tracks",
         playlist: {
           id: playlist.id,
           name: playlist.name,
