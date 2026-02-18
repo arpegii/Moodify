@@ -1,4 +1,4 @@
-const {
+import {
   clearAuthCookies,
   getAppOrigin,
   getQuery,
@@ -6,9 +6,9 @@ const {
   requestSpotifyToken,
   redirect,
   setAuthCookies,
-} = require("../_lib/spotify");
+} from "../_lib/spotify.js";
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "GET") {
     res.statusCode = 405;
     res.end("Method not allowed");
@@ -41,4 +41,4 @@ module.exports = async function handler(req, res) {
     clearAuthCookies(res);
     return redirect(res, `${appOrigin}/?auth=token_error`);
   }
-};
+}

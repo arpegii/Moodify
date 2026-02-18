@@ -1,6 +1,6 @@
-const { getRedirectUri, json, redirect } = require("../_lib/spotify");
+import { getRedirectUri, json, redirect } from "../_lib/spotify.js";
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "GET") {
     return json(res, 405, { error: "Method not allowed" });
   }
@@ -24,4 +24,4 @@ module.exports = async function handler(req, res) {
   });
 
   return redirect(res, `https://accounts.spotify.com/authorize?${params.toString()}`);
-};
+}

@@ -1,12 +1,12 @@
-const {
+import {
   getValidAccessToken,
   json,
   moodTargets,
   readJsonBody,
   spotifyRequest,
-} = require("../_lib/spotify");
+} from "../_lib/spotify.js";
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return json(res, 405, { error: "Method not allowed" });
   }
@@ -76,4 +76,4 @@ module.exports = async function handler(req, res) {
       details: error.details || error.message,
     });
   }
-};
+}

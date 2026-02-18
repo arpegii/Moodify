@@ -266,7 +266,7 @@ async function readJsonBody(req) {
   return raw ? JSON.parse(raw) : {};
 }
 
-module.exports = {
+export {
   moodTargets,
   getAppOrigin,
   getRedirectUri,
