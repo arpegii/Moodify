@@ -31,16 +31,32 @@ export default async function handler(req, res) {
 
   try {
     const me = await spotifyRequest("GET", "/me", accessToken);
-    const recs = await spotifyRequest("GET", "/recommendations", accessToken, {
+    let recs = await spotifyRequest("GET", "/recommendations", accessToken, {
       query: {
         ...settings,
         limit: 20,
+        market: me.country || "US",
       },
     });
 
-    const uris = (recs.tracks || []).map((track) => track.uri).filter(Boolean);
+    let uris = (recs.tracks || []).map((track) => track.uri).filter(Boolean);
     if (!uris.length) {
-      return json(res, 404, { error: "No recommended tracks for this mood" });
+      // Fallback: relax audio targets and use only genre seeds.
+      recs = await spotifyRequest("GET", "/recommendations", accessToken, {
+        query: {
+          seed_genres: settings.seed_genres,
+          limit: 20,
+          market: me.country || "US",
+        },
+      });
+      uris = (recs.tracks || []).map((track) => track.uri).filter(Boolean);
+    }
+
+    if (!uris.length) {
+      return json(res, 404, {
+        error: "No recommended tracks for this mood",
+        details: "Try a different mood or reconnect Spotify.",
+      });
     }
 
     const now = new Date().toLocaleDateString("en-US", {
