@@ -129,20 +129,47 @@ export default async function handler(req, res) {
 
     let tracksAdded = 0;
     let addFailure = null;
+    let addMethod = null;
     try {
       await spotifyRequest("POST", `/playlists/${playlist.id}/tracks`, accessToken, {
         body: { uris },
       });
       tracksAdded = uris.length;
+      addMethod = "POST body";
     } catch (addErr) {
       addFailure = addErr;
+      try {
+        await spotifyRequest("POST", `/playlists/${playlist.id}/tracks`, accessToken, {
+          query: { uris: uris.join(",") },
+        });
+        tracksAdded = uris.length;
+        addMethod = "POST query";
+      } catch (queryErr) {
+        addFailure = queryErr;
+      }
+    }
+
+    if (!tracksAdded) {
+      try {
+        await spotifyRequest("PUT", `/playlists/${playlist.id}/tracks`, accessToken, {
+          body: { uris },
+        });
+        tracksAdded = uris.length;
+        addMethod = "PUT body";
+      } catch (putErr) {
+        addFailure = putErr;
+      }
+    }
+
+    if (!tracksAdded) {
       // Fallback: attempt per-track insert so one invalid/restricted track won't fail the whole request.
       for (const uri of uris) {
         try {
           await spotifyRequest("POST", `/playlists/${playlist.id}/tracks`, accessToken, {
-            body: { uris: [uri] },
+            query: { uris: uri },
           });
           tracksAdded += 1;
+          addMethod = "POST query per-track";
         } catch {
           // Skip failing tracks.
         }
@@ -159,6 +186,7 @@ export default async function handler(req, res) {
         spotifyError: addFailure?.details || null,
         spotifyAuth: addFailure?.spotifyAuth || null,
         spotifyRequestId: addFailure?.spotifyRequestId || null,
+        addMethod,
         failedAt: "POST /playlists/{playlist_id}/tracks",
         playlist: {
           id: playlist.id,
@@ -178,6 +206,7 @@ export default async function handler(req, res) {
         url: playlist.external_urls?.spotify,
       },
       tracksAdded,
+      addMethod,
     });
   } catch (error) {
     const statusCode = Number(error?.status) || 500;
